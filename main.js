@@ -35,15 +35,24 @@ request(dronesSettings, function (error, response, dronesString) {
 		request(droneSettings, function (error, response, droneString) {
 			var drone = JSON.parse(droneString);
 			dal.insertDrone(new Drone(drone.id, drone.name, drone.mac_address));
+                        var fileSettings = new Settings("/drones/" + drone.id + "/files?format=json");
+                        console.log(fileSettings);
 		});
 	});
 });
 
-// Test om werking van request function te begrijpen
-request('http://www.google.com', function (error, response, body) {
-  if (!error && response.statusCode === 200) {
-    console.log(body); // Show the HTML for the Google homepage. 
-  };
-});
+// BACKUP
+//request(dronesSettings, function (error, response, dronesString) {
+//	var drones = JSON.parse(dronesString);
+//	console.log(drones);
+//	console.log("***************************************************************************");
+//	drones.forEach(function (drone) {
+//		var droneSettings = new Settings("/drones/" + drone.id + "?format=json");
+//		request(droneSettings, function (error, response, droneString) {
+//			var drone = JSON.parse(droneString);
+//			dal.insertDrone(new Drone(drone.id, drone.name, drone.mac_address));
+//		});
+//	});
+//});
 
 console.log("Hello World!");
