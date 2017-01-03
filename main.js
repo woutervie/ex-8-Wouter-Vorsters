@@ -30,6 +30,7 @@ var File = function (id, drone_ref) {
 var dronesSettings = new Settings("/drones?format=json");
 
 dal.clearDrone();
+dal.clearFile();
 
 request(dronesSettings, function (error, response, dronesString) {
 	var drones = JSON.parse(dronesString);
@@ -44,7 +45,8 @@ request(dronesSettings, function (error, response, dronesString) {
                         request(fileSettings, function (error, response, filesString) {
                             var files = JSON.parse(filesString);
                             files.forEach(function(file){
-                                console.log(file.url);
+                                //console.log(file);
+                                dal.insertFile(new File(file.id, file.ref));
                             });
                         });
 		});
