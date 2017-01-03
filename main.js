@@ -22,6 +22,11 @@ var Drone = function (id, name, mac) {
 	this.mac = mac;
 };
 
+var File = function (id, drone_ref) {
+    this.id = id;
+    this.drone_ref = drone_ref;
+};
+
 var dronesSettings = new Settings("/drones?format=json");
 
 dal.clearDrone();
@@ -35,15 +40,18 @@ request(dronesSettings, function (error, response, dronesString) {
 		request(droneSettings, function (error, response, droneString) {
 			var drone = JSON.parse(droneString);
 			dal.insertDrone(new Drone(drone.id, drone.name, drone.mac_address));
-                        var fileSettings = new Settings("/drones/" + drone.id + "/files?format=json");
-                        // console.log(fileSettings);
+                        var fileSettings = new Settings("/files?drone_id.is=" + drone.id + "&format=json&date_loaded.greaterOrEqual=2016-12-15");
                         request(fileSettings, function (error, response, filesString) {
                             var files = JSON.parse(filesString);
-                            console.log(files);
+                            files.forEach(function(file){
+                                console.log(file.url);
+                            });
                         });
 		});
 	});
 });
+
+// FILTER URL https://web-ims.thomasmore.be/datadistribution/API/2.0/files?drone_id.is=55cd4bd60ec0441e81982bf846f41965&format=json&date_loaded.greaterOrEqual=2016-12-21
 
 // BACKUP
 //request(dronesSettings, function (error, response, dronesString) {
