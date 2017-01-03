@@ -23,6 +23,7 @@ var Drone = function (id, name, mac) {
 };
 
 var File = function (id, drone_ref) {
+    this._id = id;
     this.id = id;
     this.drone_ref = drone_ref;
 };
