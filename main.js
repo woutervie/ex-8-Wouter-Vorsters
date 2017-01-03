@@ -17,7 +17,7 @@ var Settings = function (url) {
 };
 
 var Drone = function (id, name, mac) {
-	this._id = id
+	this._id = id;
 	this.name = name;
 	this.mac = mac;
 };
@@ -37,6 +37,13 @@ request(dronesSettings, function (error, response, dronesString) {
 			dal.insertDrone(new Drone(drone.id, drone.name, drone.mac_address));
 		});
 	});
+});
+
+// Test om werking van request function te begrijpen
+request('http://www.google.com', function (error, response, body) {
+  if (!error && response.statusCode === 200) {
+    console.log(body); // Show the HTML for the Google homepage. 
+  };
 });
 
 console.log("Hello World!");
