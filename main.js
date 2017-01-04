@@ -62,7 +62,7 @@ request(dronesSettings, function (error, response, dronesString) {
                                 var contentSettings = new Settings("/files/" + file.id + "/contents?format=json");
                                 //console.log(contentSettings.url);
                                 request(contentSettings, function (error, response, contentsString) { 
-                                      if (!error && response.statusCode === 200) {
+                                    if (!error && response.statusCode === 200) {
                                         var contents = JSON.parse(contentsString);
                                         //console.log(contents);
                                                                                                  
