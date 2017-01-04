@@ -28,17 +28,20 @@ var File = function (id, drone_ref) {
     this.drone_ref = drone_ref;
 };
 
-//var Content = function (id, drone_ref) {
-//    this._id = id;
-//    this.id = id;
-//    this.drone_ref = drone_ref;
-//};
+var Content = function (id, mac, datetime, rssi, file_ref) {
+    this._id = id;
+    this.id = id;
+    this.mac = mac;
+    this.datetime = datetime;
+    this.rssi = rssi;
+    this.file_ref = file_ref;
+};
 
 var dronesSettings = new Settings("/drones?format=json");
 
 dal.clearDrone();
 dal.clearFile();
-//dal.clearContent();
+dal.clearContent();
 
 request(dronesSettings, function (error, response, dronesString) {
 	var drones = JSON.parse(dronesString);
@@ -69,7 +72,7 @@ request(dronesSettings, function (error, response, dronesString) {
                                             request(contentSettings, function (error, response, contentString) {
                                                 if (!error && response.statusCode === 200) {    
                                                     var content = JSON.parse(contentString);
-                                                    console.log(content);  
+                                                    dal.insertContent(new Content(content.id, content.mac_address, content.datetime, content.rssi, content.ref));
                                                 }                                         
                                             });
                                         }); 
@@ -80,8 +83,5 @@ request(dronesSettings, function (error, response, dronesString) {
 		});
 	});
 });
-
-// FILTER URL https://web-ims.thomasmore.be/datadistribution/API/2.0/files?drone_id.is=55cd4bd60ec0441e81982bf846f41965&format=json&date_loaded.greaterOrEqual=2016-12-21
-
 
 console.log("Hello World!");
