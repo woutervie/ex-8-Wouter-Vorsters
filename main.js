@@ -28,16 +28,22 @@ var File = function (id, drone_ref) {
     this.drone_ref = drone_ref;
 };
 
+//var Content = function (id, drone_ref) {
+//    this._id = id;
+//    this.id = id;
+//    this.drone_ref = drone_ref;
+//};
+
 var dronesSettings = new Settings("/drones?format=json");
 
 dal.clearDrone();
 dal.clearFile();
-dal.clearContent();
+//dal.clearContent();
 
 request(dronesSettings, function (error, response, dronesString) {
 	var drones = JSON.parse(dronesString);
-	console.log(drones);
-	console.log("***************************************************************************");
+	//console.log(drones);
+	//console.log("***************************************************************************");
 	drones.forEach(function (drone) {
 		var droneSettings = new Settings("/drones/" + drone.id + "?format=json");
 		request(droneSettings, function (error, response, droneString) {
@@ -51,9 +57,21 @@ request(dronesSettings, function (error, response, dronesString) {
                                 dal.insertFile(new File(file.id, file.ref));
                                 
                                 var contentSettings = new Settings("/files/" + file.id + "/contents?format=json");
-                                request(fileSettings, function (error, response, contentsString) {
-                                    var files = JSON.parse(contentsString);
+                                console.log(contentSettings.url);
+                                request(contentSettings, function (error, response, contentsString) {
+                                    var contents = JSON.parse(contentsString);
+                                    //console.log(contents);
                                     
+                                    contents.forEach(function(content) {
+                                        var contentSettings = new Settings("/" + content.ref + "/contents/" + content.id + "?format=json");
+                                        
+                                        request(contentSettings, function (error, response, contentString) {
+                                        var content = JSON.parse(contentString);
+                                        console.log(content);                                        
+                                        
+                                        
+                                        });
+                                    });                                  
                                 });
                             });
                         });
