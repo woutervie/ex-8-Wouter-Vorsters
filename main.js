@@ -57,21 +57,20 @@ request(dronesSettings, function (error, response, dronesString) {
                                 dal.insertFile(new File(file.id, file.ref));
                                 
                                 var contentSettings = new Settings("/files/" + file.id + "/contents?format=json");
-                                console.log(contentSettings.url);
+                                //console.log(contentSettings.url);
                                 request(contentSettings, function (error, response, contentsString) {
-                                    var contents = JSON.parse(contentsString);
-                                    //console.log(contents);
-                                    
-                                    contents.forEach(function(content) {
-                                        var contentSettings = new Settings("/" + content.ref + "/contents/" + content.id + "?format=json");
-                                        
-                                        request(contentSettings, function (error, response, contentString) {
-                                        var content = JSON.parse(contentString);
-                                        console.log(content);                                        
-                                        
-                                        
-                                        });
-                                    });                                  
+                                    console.log(contentString);
+                                    //var contents = JSON.parse(contentsString);
+//                                    
+//                                    contents.forEach(function(content) {
+//                                        var contentSettings = new Settings("/" + content.ref + "/contents/" + content.id + "?format=json");
+//                                        
+//                                        request(contentSettings, function (error, response, contentString) {
+//                                        var content = JSON.parse(contentString);
+//                                        console.log(content);                                        
+//                                                                               
+//                                        });
+//                                    });                                  
                                 });
                             });
                         });
@@ -81,18 +80,5 @@ request(dronesSettings, function (error, response, dronesString) {
 
 // FILTER URL https://web-ims.thomasmore.be/datadistribution/API/2.0/files?drone_id.is=55cd4bd60ec0441e81982bf846f41965&format=json&date_loaded.greaterOrEqual=2016-12-21
 
-// BACKUP
-//request(dronesSettings, function (error, response, dronesString) {
-//	var drones = JSON.parse(dronesString);
-//	console.log(drones);
-//	console.log("***************************************************************************");
-//	drones.forEach(function (drone) {
-//		var droneSettings = new Settings("/drones/" + drone.id + "?format=json");
-//		request(droneSettings, function (error, response, droneString) {
-//			var drone = JSON.parse(droneString);
-//			dal.insertDrone(new Drone(drone.id, drone.name, drone.mac_address));
-//		});
-//	});
-//});
 
 console.log("Hello World!");
