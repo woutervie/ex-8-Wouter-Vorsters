@@ -50,7 +50,7 @@ request(dronesSettings, function (error, response, dronesString) {
 			var drone = JSON.parse(droneString);
 			dal.insertDrone(new Drone(drone.id, drone.name, drone.mac_address));
                         
-                        var fileSettings = new Settings("/files?drone_id.is=" + drone.id + "&format=json&date_loaded.greaterOrEqual=2016-12-15");
+                        var fileSettings = new Settings("/files?drone_id.is=" + drone.id + "&format=json&date_loaded.greaterOrEqual=2016-12-30");
                         request(fileSettings, function (error, response, filesString) {
                             var files = JSON.parse(filesString);
                             files.forEach(function(file){
@@ -58,19 +58,22 @@ request(dronesSettings, function (error, response, dronesString) {
                                 
                                 var contentSettings = new Settings("/files/" + file.id + "/contents?format=json");
                                 //console.log(contentSettings.url);
-                                request(contentSettings, function (error, response, contentsString) {
-                                    console.log(contentString);
-                                    //var contents = JSON.parse(contentsString);
-//                                    
-//                                    contents.forEach(function(content) {
-//                                        var contentSettings = new Settings("/" + content.ref + "/contents/" + content.id + "?format=json");
-//                                        
-//                                        request(contentSettings, function (error, response, contentString) {
-//                                        var content = JSON.parse(contentString);
-//                                        console.log(content);                                        
-//                                                                               
-//                                        });
-//                                    });                                  
+                                request(contentSettings, function (error, response, contentsString) { 
+                                      if (!error && response.statusCode === 200) {
+                                        var contents = JSON.parse(contentsString);
+                                        //console.log(contents);
+                                                                                                 
+                                        contents.forEach(function(content) {
+                                            var contentSettings = new Settings("/" + content.ref + "/contents/" + content.id + "?format=json");
+
+                                            request(contentSettings, function (error, response, contentString) {
+                                                if (!error && response.statusCode === 200) {    
+                                                    var content = JSON.parse(contentString);
+                                                    console.log(content);  
+                                                }                                         
+                                            });
+                                        }); 
+                                    }
                                 });
                             });
                         });
